@@ -1,0 +1,22 @@
+{
+  "name": "mini-cluster",
+  "version": "1.0.0",
+  "description": "demo version of handmade node cluster",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vngrv/mini-cluster.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vngrv/mini-cluster/issues"
+  },
+  "homepage": "https://github.com/vngrv/mini-cluster#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
