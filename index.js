@@ -30,20 +30,8 @@ app.get('/list', (request, response) => {
     response.send(`Worker ${cluster.worker.id} handle request`);   
 });
 
-app.get('/history', (request, response) => {
-    console.log(cluster)
-    
-    client.get('worker', (err, data) => {
-        if (err) throw err;
-    
-        if (data !== null) {
-          res.send(setResponse(username, data));
-        } else {
-          next();
-        }
-      });
-    
-    response.send(client.get("key"));
+app.get('/history', (request, response) => {  
+    cache(request, response)
 })
 
 
@@ -80,6 +68,7 @@ function recievedToMaster(worker) {
         console.log(`\n-- Master (${process.pid})\n-- received message from worker (${worker.process.pid}):\n  `, msg, '\n')
     });
 }
+
 function sendToWorker(worker) {
     let message = {
         masterId: process.pid,
@@ -100,7 +89,24 @@ function sendToMaster() {
 function recievedToWorker() {
     process.on('message', function(msg) {
         let message = '- Worker ' + process.pid + ' received message from master ' + msg.masterId;
-        client.setex('worker', 3600, message);
-        console.log(message);
+        
+        client.setex(process.pid, 3600, 'worker');
+        // console.log(message);
     });
 }
+
+
+function cache(req, res, next) {
+  
+    client.multi().keys("*", (err, data) => {
+      if (err) throw err;
+  
+      console.log(data)
+      if (data !== null) {
+        res.send(data);
+        
+      } else {
+        next();
+      }
+    });
+  }
